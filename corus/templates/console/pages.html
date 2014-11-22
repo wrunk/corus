@@ -1,0 +1,50 @@
+{% extends "console/base.html" %}
+
+{% block content %}
+  <h1>Page Generator Page!</h1>
+  <p>View current pages, and create new ones.</p>
+
+  <h3>View Current Pages</h3>
+  <script>
+    function confirm_delete(path){
+      if(confirm("Are you sure you want to delete " + path)){
+        window.location.href = "/cor/console/pages/delete?path=" + path;
+      }
+    }
+  </script>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr><th>Created</th><th>Last Updated</th><th>Path</th><th>Title</th><th>Active?</th><th>Links</th></tr>
+    </thead>
+    <tbody>
+      {% for page in pages %}
+      <tr>
+        <td>{{ page.created }}</td>
+        <td>{{ page.updated }}</td>
+        <td>{{ page.key.id() }}</td>
+        <td>{{ page.title }}</td>
+        <td>{{ page.active }}</td>
+        <td>
+          <a href="/cor/console/pages/edit?path={{ page.key.id() }}" target="_blank">Edit</a> |
+          <a href="/{{ page.key.id() }}" target="_blank">Preview</a> |
+          <a href="#" onclick="confirm_delete('{{ page.key.id() }}');return false;">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+  <h3>Create a New Page</h3>
+  <form method="post" action="/cor/console/pages/new" role="form">
+      <div class="form-group">
+        <fieldset>
+          <legend>Create a New Page</legend>
+          <input class="form-control" type="text" placeholder="* Path" name="path"><br>
+          <input class="form-control" type="text" placeholder="* Title" name="title"><br>
+          <button type="submit" class="btn btn-default">Create and Edit</button><br>
+            * = required
+        </fieldset>
+      </div>
+    </form>
+{% endblock %}

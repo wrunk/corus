@@ -45,3 +45,7 @@ target/
 
 # Pycharm
 .idea/
+
+# Corus specific stuff
+# Ignore nudge as it is symlinked to the base for testing
+nudge

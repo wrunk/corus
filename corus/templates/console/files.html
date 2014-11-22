@@ -1,0 +1,59 @@
+{% extends "console/base.html" %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>File Management Page</h1>
+
+      <h3>View Current Files</h3>
+      <script>
+        function confirm_delete(id){
+          if(confirm("Are you sure you want to delete " + id)){
+            window.location.href = "/cor/console/files/del?name=" + id;
+          }
+        }
+      </script>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr><th>Created</th><th>Size</th><th>File Name</th><th>Links</th></tr>
+        </thead>
+        <tbody>
+          {% for file in files %}
+          <tr>
+            <td>{{ file.blob_creation }}</td>
+            <td>{{ file.blob_size_in_bytes }}B</td>
+            <td>{{ file.key.id() }}</td>
+            <td>
+              <a href="/cor/console/files/edit?name={{ file.key.id() }}" target="_blank">View</a> |
+              <a href="#" onclick="confirm_delete('{{ file.key.id() }}');return false;">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div><!--/col-->
+  </div><!--/row-->
+
+  <div class="row">
+    <div class="col-lg-12">
+  <h3>Upload a New File</h3>
+  <p>Note it is not currently allowed to re-upload a file with the same name to avoid losing
+    things. Delete the old file above if necessary. Note also this upload form below has
+    "upload url" which can expire. Refresh this page if that happens.</p>
+    <form method="post" action="{{ upload_url }}" role="form" enctype="multipart/form-data">
+      <div class="form-group">
+{#        <fieldset>#}
+{#          <legend>Upload a new File</legend>#}
+          <div class="form-group">
+            <label for="file_info">Select File to Upload</label>
+            <input type="file" name="file_info" id="file_info">
+          </div>
+          <button type="submit" class="btn btn-default">Upload</button><br>
+          {# This is file_info because blobstore actually takes the file upload and passes us the meta data #}
+{#        </fieldset>#}
+      </div>
+    </form>
+  </div><!--/col-->
+  </div><!--/row-->
+{% endblock %}

@@ -1,0 +1,61 @@
+# Note this is SAMPLE app.yaml for use with developing/testing/experimenting with corus.
+# In practice you should integrate settings here into your own project.
+
+application: corus-sample-app
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+inbound_services:
+- mail_bounce
+
+
+libraries:
+# All of our console site and email templates are rendered with jinja2
+- name: jinja2
+  version: "2.6"
+# Webapp2 is used to handle file uploads for blobstore (didn't port that to nudge yet)
+- name: webapp2
+  version: "2.5.2"
+# The premailer library (used for CSS inlining in emails) uses lxml
+- name: lxml
+  version: "2.3.5"
+
+builtins:
+- deferred: off
+
+handlers:
+
+# Bounce processing should go to corus
+- url: /_ah/bounce
+  script: corus.main.app
+  # Login admin only because this is an internal google service
+  login: admin
+
+# Use webapp2 to deal with blobstore file uploads for now
+- url: /upload
+  script: corus.main.wa2_wsgi_app
+
+# Corus static files handler
+- url: /cor/static
+  static_dir: corus/static
+
+# Corus home
+# Will capture links for tracking pixels, link tracking/redirectors, email tracking pixels, etc
+- url: /cor/.*
+  script: corus.main.wsgi_app
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.db
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?.*\.bak$
+- ^tests/.*

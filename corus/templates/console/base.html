@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Corus admin console">
+  <meta name="author" content="Warren Runk">
+  <link rel="icon" href="/static/favicon.ico">
+  <title>Corus Console{% if page_name %} - {{ page_name }}{%  endif %}</title>
+
+
+  <!-- Core Bootstrap CSS -->
+  <link href="/cor/static/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+    /* TODO move this to its own stylesheet */
+  </style>
+
+{#  <link href="/cor/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">#}
+{#  <script src="/cor/static/bootstrap/js/jquery.1.8.3.min.js"></script>#}
+{#  <script src="/cor/static/bootstrap/js/console.js"></script>#}
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#console-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/cor/console">Corus Console</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="console-navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/cor/console/pages">Page Generator</a></li>
+          <li><a href="/cor/console/files">Files</a></li>
+          <li><a href="/cor/console/emails">Emails</a></li>
+          <li><a href="/" target="_blank">View Main Site</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+  </nav>
+
+
+{#    <div class="navbar navbar-inverse navbar-fixed-top">#}
+{#    <div class="navbar-inner" style="padding-left: 10px; padding-right: 10px;">#}
+{#      <a class="brand" href="/cor/console">Corus Console</a>#}
+{#      <p class="navbar-text">#}
+{#      <a class="navbar-link" href="/cor/console/pages">Page Generator</a> |#}
+{#      <a class="navbar-link" href="/cor/console/files">Files</a> |#}
+{#      <a class="navbar-link" href="/cor/console/emails">Emails</a> |#}
+{#      <a class="navbar-link" target="_blank" href="/">View Main Site</a>#}
+{#      </p>#}
+{#    </div>#}
+{#  </div>#}
+
+  <div class="container">
+
+
+        {% block content %}
+        {% endblock %}
+
+
+
+    <hr>
+        <footer>
+      <p>Corus Version {{ csettings.corus_version }}
+        <a href="http://github.com/wrunk/corus">Get Source</a></p>
+        </footer>
+  </div><!--/.fluid-container-->
+  <!-- Bootstrap core JavaScript ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="/cor/static/jquery.1.11.1.min.js"></script>
+  <script src="/cor/static/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/cor/static/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

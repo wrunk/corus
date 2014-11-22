@@ -1,0 +1,30 @@
+{% extends "console/base.html" %}
+
+{% block content %}
+  <h1>Edit Page Generator Page!</h1>
+
+  <form method="post" action="/cor/console/pages/save" role="form">
+      <div class="form-group">
+        <fieldset>
+          <legend>Edit Page <strong>{{ page.key.id() }}</strong></legend>
+          Page Path (can't change): <strong>{{ page.key.id() }}</strong><br><br>
+          <input class="form-control" type="hidden" value="{{ page.key.id() }}" name="path">
+          <label for="title">Title:</label>
+          <input id="title" class="form-control" type="text" placeholder="* Title" name="title" value="{{ page.title }}"><br>
+
+          <label for="content">Content:</label>
+          <textarea id="content" class="form-control" rows="5" style="min-width: 500px" name="content">{{ page.content|e }}</textarea><br>
+
+          <label for="notes">Private Notes:</label>
+          <textarea id="notes" class="form-control" rows="5" style="min-width: 500px" name="notes">{{ page.notes }}</textarea><br>
+
+          <input id="active" class="form-control" type="checkbox" name="active"
+                 value="true" {% if page.active %}checked="true"{% endif %}>
+          <label style="display: inline-block" for="active">Active? (if unchecked the page will not be publicly accessible</label><br><br>
+
+          <button type="submit" class="btn btn-default">Save and Re-Edit</button><br>
+            * = required
+        </fieldset>
+      </div>
+    </form>
+{% endblock %}
