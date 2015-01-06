@@ -1,27 +1,12 @@
 #!/usr/bin/env python
-# Copyright 2013 DeadHeap.com
 
 
-"""
-Endpoints for the email section of the console
-"""
+from corus.common.args import html
 from nudge.publisher import Endpoint, Args
 import nudge.arg as args
 from nudge.publisher import Endpoint
 from nudge.renderer import HTML, Redirect, Plain, Result
 
-
-# How do we get the nudge renderers and such to have access to the console?
-_engine = None
-def set_engine(engine):
-    global _engine
-    _engine = engine
-
-
-def html(content):
-    if isinstance(content, dict):
-        content = _engine.get('template', 'render')(content['template_name'], content)
-    return Result(content=content, content_type='text/html; charset=utf-8', http_status=200)
 
 endpoints = [
     Endpoint(

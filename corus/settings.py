@@ -21,9 +21,10 @@ class SettingsService(EngineService):
     __all_settings = None
 
     def __init__(self, engine):
+        # Project base path (where app.yaml needs to be). No trailing slash.
         self.base_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 
-        with open(self.base_path + '/VERSION.txt') as fp:
+        with open(self.base_path + '/corus/VERSION.txt') as fp:
             version = fp.read().strip()
 
         assert 5 <= len(version) <= 8 and '.' in version, 'Invalid corus version'

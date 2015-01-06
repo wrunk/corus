@@ -1,30 +1,126 @@
 {% extends "console/base.html" %}
 
 {% block content %}
-  <h1>Edit Page Generator Page!</h1>
 
-  <form method="post" action="/cor/console/pages/save" role="form">
-      <div class="form-group">
-        <fieldset>
-          <legend>Edit Page <strong>{{ page.key.id() }}</strong></legend>
-          Page Path (can't change): <strong>{{ page.key.id() }}</strong><br><br>
-          <input class="form-control" type="hidden" value="{{ page.key.id() }}" name="path">
-          <label for="title">Title:</label>
-          <input id="title" class="form-control" type="text" placeholder="* Title" name="title" value="{{ page.title }}"><br>
+  <h3>Page ({{ page.key.id() }}) Properties</h3>
+  <table class="table table-bordered table-hover" style="width: 450px">
 
-          <label for="content">Content:</label>
-          <textarea id="content" class="form-control" rows="5" style="min-width: 500px" name="content">{{ page.content|e }}</textarea><br>
+      <tr>
+          <th style="width: 190px">Path</th>
+          <td>{{ page.key.id() }}</td>
+      </tr>
 
-          <label for="notes">Private Notes:</label>
-          <textarea id="notes" class="form-control" rows="5" style="min-width: 500px" name="notes">{{ page.notes }}</textarea><br>
+      <tr>
+          <th style="width: 120px">Created</th>
+          <td>{{ page.created }}</td>
+      </tr>
 
-          <input id="active" class="form-control" type="checkbox" name="active"
-                 value="true" {% if page.active %}checked="true"{% endif %}>
-          <label style="display: inline-block" for="active">Active? (if unchecked the page will not be publicly accessible</label><br><br>
+      <tr>
+          <th style="width: 120px">Updated</th>
+          <td>{{ page.updated }}</td>
+      </tr>
 
-          <button type="submit" class="btn btn-default">Save and Re-Edit</button><br>
-            * = required
-        </fieldset>
+      <tr>
+          <th>Number of Versions</th>
+          <td>{{ page.number_of_versions }}</td>
+      </tr>
+
+      <tr>
+          <th>Active?</th>
+          <td>{{ page.is_active }}</td>
+      </tr>
+
+      <tr>
+          <th>Base Template?</th>
+          <td>{{ page.number_of_versions }}</td>
+      </tr>
+
+      <tr>
+          <th>Private Notes About This Page</th>
+          <td>{{ page.private_notes }}</td>
+      </tr>
+
+  </table>
+
+
+  <h3>All Versions Table</h3>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Created</th>
+        <th>Version #</th>
+        <th>Title</th>
+        <th>Base Template Name</th>
+        <th>Preview</th>
+        <th>Publish</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for version in versions %}
+      <tr>
+        <td>{{ version.created }}</td>
+        <td>{{ version._version }}</td>
+        <td>{{ version.title }}</td>
+        <td>{{ version.base_template }}</td>
+        <td>
+          <a href="/{{ page.key.id() }}?version={{ version._version }}" target="_blank">Preview</a>
+        </td>
+        <td>pub</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  <br>
+  <hr>
+
+  <h3>Create a New Version For This Page <strong>({{ page.key.id() }})</strong></h3>
+  <form method="post" action="/cor/console/pages/version" role="form">
+    <div class="form-group">
+
+      <input type="hidden" value="{{ page.key.id() }}" name="path">
+
+      <h4 style="font-size: 14px">* What Kind of Page Is This?</h4>
+
+      {% for name, title in base_templates|dictsort %}
+      <div class="radio">
+        <label>
+          {% if latest_version.base_template == name %}
+          <input type="radio" name="base_template" value="{{ name }}" checked>{{ title }}
+          {% else %}
+          <input type="radio" name="base_template" value="{{ name }}">{{ title }}
+          {% endif %}
+        </label>
       </div>
-    </form>
+      {% endfor %}
+
+      <div class="form-group">
+        <label for="new_page_title">* Title</label>
+        <input class="form-control" type="text" placeholder="* Title" name="title"
+               id="new_page_title" value="{{ latest_version.title }}">
+      </div>
+
+      <div class="form-group">
+        <label for="new_page_content">* Content</label>
+        <textarea class="form-control" rows="15" placeholder="* Content" name="content"
+             id="new_page_content">{{ latest_version.content|e }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="revision_notes">Private Revision Notes</label>
+        <textarea class="form-control" rows="4" placeholder="Private Revision Notes"
+                  name="revision_notes" id="revision_notes"></textarea>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" checked name="publish" value="true">Publish Now
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-default">Save New Version</button><br>
+        * = required
+    </div>
+  </form>
+
 {% endblock %}

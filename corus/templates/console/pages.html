@@ -1,20 +1,17 @@
 {% extends "console/base.html" %}
 
 {% block content %}
-  <h1>Page Generator Page!</h1>
-  <p>View current pages, and create new ones.</p>
-
-  <h3>View Current Pages</h3>
-  <script>
-    function confirm_delete(path){
-      if(confirm("Are you sure you want to delete " + path)){
-        window.location.href = "/cor/console/pages/delete?path=" + path;
-      }
-    }
-  </script>
+  <h3>All Pages</h3>
   <table class="table table-bordered table-hover">
     <thead>
-      <tr><th>Created</th><th>Last Updated</th><th>Path</th><th>Title</th><th>Active?</th><th>Links</th></tr>
+      <tr>
+        <th>Created</th>
+        <th>Last Updated</th>
+        <th>Path</th>
+        <th>Is Base Template</th>
+        <th>Is Active</th>
+        <th>Links</th>
+      </tr>
     </thead>
     <tbody>
       {% for page in pages %}
@@ -22,12 +19,12 @@
         <td>{{ page.created }}</td>
         <td>{{ page.updated }}</td>
         <td>{{ page.key.id() }}</td>
-        <td>{{ page.title }}</td>
-        <td>{{ page.active }}</td>
+        <td>{{ page.is_base_template }}</td>
+        <td>{{ page.is_active }}</td>
         <td>
-          <a href="/cor/console/pages/edit?path={{ page.key.id() }}" target="_blank">Edit</a> |
-          <a href="/{{ page.key.id() }}" target="_blank">Preview</a> |
-          <a href="#" onclick="confirm_delete('{{ page.key.id() }}');return false;">Delete</a>
+{#          TODO CHANGE THIS TO LINK TO EDIT PAGE PAGE WHICH DISPLAYS VERSION AND LETS YOU MAKE A #}
+{#          NEW VERSION. PROBABLY CANT PREVIEW FROM HERE SINCE ONE PAGE CAN HAVE MANY ACTIVE VERSIONS#}
+          <a href="/cor/console/pages/edit?path={{ page.key.id() }}">Edit</a>
         </td>
       </tr>
       {% endfor %}
@@ -35,16 +32,59 @@
     </tbody>
   </table>
 
+  <br>
+  <hr>
+
+
+{#  TODO THIS IS THE CREATE NEW PAGE and first version PAGE!#}
+{#  TODO ADD ALL REQUIRED PROPS HERE LIKE BASE, PARENT, CONTENT, #}
   <h3>Create a New Page</h3>
   <form method="post" action="/cor/console/pages/new" role="form">
       <div class="form-group">
-        <fieldset>
-          <legend>Create a New Page</legend>
-          <input class="form-control" type="text" placeholder="* Path" name="path"><br>
-          <input class="form-control" type="text" placeholder="* Title" name="title"><br>
+{#        <fieldset>#}
+{#          <legend>New Page Settings (One page has many versions)</legend>#}
+
+          <h4 style="font-size: 14px">* What Kind of Page Is This?</h4>
+
+{#          Uses some file bases#}
+{#          Uses some DB templates#}
+{#          Uses NO base template#}
+{#          IS a base template#}
+
+          {% for name, title in base_templates|dictsort %}
+          <div class="radio">
+            <label>
+              <input type="radio" name="base_template" value="{{ name }}">{{ title }}
+            </label>
+          </div>
+          {% endfor %}
+
+          <div class="form-group">
+            <label for="new_page_path">* URL Path (Ex. blog/about-us)</label>
+            <input class="form-control" type="text" placeholder="* Path" name="path"
+                 id="new_page_path">
+          </div>
+
+          <div class="form-group">
+            <label for="new_page_title">* Title</label>
+            <input class="form-control" type="text" placeholder="* Title" name="title"
+                 id="new_page_title">
+          </div>
+
+          <div class="form-group">
+            <label for="new_page_content">* Content</label>
+            <textarea class="form-control" rows="8" placeholder="* Content" name="content"
+                 id="new_page_content"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="new_page_notes">Private Page Notes (Internal notes about this page)</label>
+            <textarea class="form-control" rows="4" placeholder="Private Revision Notes"
+                      name="revision_notes" id="notes"></textarea>
+          </div>
+
           <button type="submit" class="btn btn-default">Create and Edit</button><br>
             * = required
-        </fieldset>
       </div>
     </form>
 {% endblock %}

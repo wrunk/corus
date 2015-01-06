@@ -41,9 +41,9 @@ handlers:
 - url: /cor/static
   static_dir: corus/static
 
-# Corus home
-# Will capture links for tracking pixels, link tracking/redirectors, email tracking pixels, etc
-- url: /cor/.*
+# Corus dynamic requests. Will serve the site's pages, corus console, and corus email links like
+# link tracking/redirectors, email tracking pixels, etc
+- url: /.*
   script: corus.main.wsgi_app
 
 skip_files:

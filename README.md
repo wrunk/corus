@@ -55,6 +55,7 @@
 - Console Overview:
     - Initialize first load:
         - Load a starting page
+        - A starting template
         - Load a starting email
 - Email MGMT:
     - Very basic CMS (just paste HTML and text) (use the files section to upload assets for use in 
